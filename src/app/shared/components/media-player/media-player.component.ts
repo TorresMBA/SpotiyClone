@@ -6,6 +6,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./media-player.component.css']
 })
 export class MediaPlayerComponent implements OnInit {
+  mockCover: any = {
+    conver:'',
+    name: 'Gioli & Assia',
+    album: 'BEBE (Oficial)'
+  };
 
   constructor() { }
 
