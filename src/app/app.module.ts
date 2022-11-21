@@ -1,3 +1,4 @@
+import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
@@ -14,7 +15,8 @@ import { AppComponent } from './app.component';
   //! Si es un modulo se importa
   imports: [ 
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule,
   ],
   //*Se puede exportar lo que uno declaro(declarations)
   exports:[],
