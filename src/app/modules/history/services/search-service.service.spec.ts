@@ -1,13 +1,16 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 
-import { SearchServiceService } from './search.service';
+import { SearchService } from './search.service';
 
 describe('SearchServiceService', () => {
-  let service: SearchServiceService;
+  let service: SearchService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(SearchServiceService);
+    TestBed.configureTestingModule({
+      imports:[HttpClientTestingModule]
+    });
+    service = TestBed.inject(SearchService);
   });
 
   it('should be created', () => {
