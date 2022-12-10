@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { TrackModel } from '@core/models/tracks.model';
 import { MultimediaService } from '@shared/services/multimedia.service';
 import { Subscription } from 'rxjs';
@@ -9,34 +9,32 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./media-player.component.css']
 })
 export class MediaPlayerComponent implements OnInit, OnDestroy {
-  mockCover: TrackModel = {
-    cover:'https://jenesaispop.com/wp-content/uploads/2009/09/guetta_onelove.jpg',
-    name: 'Gioli & Assia',
-    album: 'BEBE (Oficial)',
-    url: '',
-    _id:'1'
-  };
+  @ViewChild('progressBar') progressBar: ElementRef = new ElementRef('')
+  listObservers$: Array<Subscription> = [];  
+  state: string = 'paused';
 
-  listObservers$: Array<Subscription> = [];
-
-  constructor(private _MultimediaService: MultimediaService) { }
+  constructor(public _MultimediaService: MultimediaService) { }
 
   ngOnInit(): void {
-    const observable$1 = this._MultimediaService.myObservable$1
-    .subscribe(
-      (responseOk) => {
-        //TODO: next()
-        console.log("Llego Perfecto el agua");
-      },
-      (error) => {
-        //TODO: error()
-        console.log("Se tapo la tubiería");
-      }
-    );
+    const observer$ = this._MultimediaService.playerStatus$.subscribe( res => {
+      console.log("ngOnInit -> observer$ ", res);
+      this.state = res
+    });
+    this.listObservers$ = [observer$];
   }
 
   ngOnDestroy(): void {
-    console.log('GG');
     this.listObservers$.forEach(x => x.unsubscribe())
+  }
+
+  handlePosition(event: MouseEvent): void {
+    const elNative: HTMLElement = this.progressBar.nativeElement
+    const { clientX } = event
+    const { x, width } = elNative.getBoundingClientRect()
+    const clickX = clientX - x //TODO: 1050 - x
+    const percentageFromX = (clickX * 100) / width
+    console.log(`Click(x): ${percentageFromX}`);
+    this._MultimediaService.seekAudio(percentageFromX)
+
   }
 }
