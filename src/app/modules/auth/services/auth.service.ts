@@ -25,4 +25,8 @@ export class AuthService {
       })
     );
   }
+
+  public suma(a:number, b:number): Number{
+    return a + b;
+  }
 }
